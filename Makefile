@@ -28,6 +28,10 @@ GodMode9:
 DSP1:
 	@$(MAKE) --always-make -C DSP1
 
+CtrNoTimeOffset:
+	@$(MAKE) --always-make -C CtrNoTimeOffset
+
+
 output:
 	mkdir -p Outputs
 	cp Luma3ds/boot.firm Outputs
@@ -46,13 +50,17 @@ output:
 	cp CtrNoTimeOffset/ctr-no-timeoffset.3dsx Outputs/3ds/ctr-no-timeoffset
 	cp CtrNoTimeOffset/ctr-no-timeoffset.smdh Outputs/3ds/ctr-no-timeoffset
 
-CtrNoTimeOffset:
-	@$(MAKE) --always-make -C CtrNoTimeOffset
-
 install:
 	sudo $(Package) -S 3ds-dev 3ds-portlibs
 
 update:
 	@for dir in $(SUBDIRS); do git --git-dir $$dir/.git pull; done
 
-.PHONY: $(SUBDIRS) clean
+fetch:
+	git clone https://github.com/LumaTeam/Luma3DS.git
+	git clone https://github.com/fincs/new-hbmenu.git
+	git clone https://github.com/d0k3/GodMode9/tree/v1.9.2pre1
+	git clone https://github.com/zoogie/DSP1.git
+	git clone https://github.com/ihaveamac/ctr-no-timeoffset.git
+
+.PHONY: $(SUBDIRS) clean output install update fetch
